@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #outNum {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        #outNum li {
+            background: red;
+            width: 25px;
+            height: 25px;
+            color: white;
+            text-align: center;
+            margin: 2px;
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <input type="text" id="inNum">
+    <button id="btnLeftIn">左侧入</button>
+    <button id="btnRightIn">右侧入</button>
+    <button id="btnLeftOut">左侧出</button>
+    <button id="btnRightOut">右侧出</button>
+
+    <ul id="outNum"></ul>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+
+        var $inNum = $("#inNum");
+        var $outNum = $("#outNum")
+        var $leftIn = $("#btnLeftIn")
+        var $rightIn = $("#btnRightIn");
+        var $leftOut = $("#btnLeftOut");
+        var $rightOut = $("#btnRightOut");
+        var $li = $("#outNum > li")
+        var outNum = document.getElementById("outNum")
+        //var li = document.getElementsByTagName("li")
+
+
+
+        
+        $leftIn.click(function () {
+            var data = inNum.value;
+            var newLi = document.createElement("li")
+            newLi.innerHTML = data
+            newLi.setAttribute("class", "liStyle");
+            var num = vertify(data);
+            console.log(outNum.childNodes.length)
+
+            if (num == true) {
+                outNum.insertBefore(newLi, outNum.firstChild);
+                initInput();
+                let data = newLi.innerHTML
+                newLi.addEventListener("click", function () {
+                    this.remove();
+                    alert("删除的数字是：" + data)
+                })
+                console.log(outNum.childNodes)
+
+            }
+
+        })
+
+
+        $rightIn.click(function () {
+            var data = inNum.value;
+            var newLi = document.createElement("li")
+            newLi.innerHTML = data
+            newLi.setAttribute("class", "liStyle");
+            var num = vertify(data);
+
+            if (num == true) {
+                outNum.insertBefore(newLi, $("outNum>li").nextSibling);
+                initInput()
+                let data = newLi.innerHTML
+                newLi.addEventListener("click", function () {
+                    this.remove();
+                    alert("删除的数字是：" + data)
+
+                })
+
+            }
+
+        })
+
+
+        $leftOut.click(function () {
+            console.log()
+            if (outNum.childNodes.length == 0) {
+                alert("队列为空")
+            } else {
+                alert("左出的数字是：" + outNum.firstChild.innerHTML)
+                outNum.firstChild.remove();
+            }
+
+
+
+
+        })
+        $rightOut.click(
+            function () {
+                if (outNum.childNodes.length == 0) {
+                    alert("队列为空")
+                } else {
+                    alert("右出的数字是：" + outNum.lastChild.innerHTML)
+                    outNum.lastChild.remove()
+                }
+
+
+            })
+
+
+
+        function initInput() {
+            inNum.value = "";
+            inNum.focus();
+
+        }
+
+        function vertify(data) {
+            if (data == "") {
+                alert("请输入一个数")
+                initInput()
+                return false;
+            } else if (isNaN(data)) {
+                alert("请输入数字！")
+                initInput();
+                //return false;
+            } else {
+                return true;
+            }
+        }
+
+
+
+
+
+
+
+    </script>
+    <!-- 
+        array.shift():从数组中删除第一个元素，并返回删除的数               i --
+        array.pop():从数组中删除最后一个元素，并返回删除的数                --i
+        
+        array.unshift():将一个或多个元素添加到数组的开头，并返回新数组的长度 i+++
+        array.push():将一个或多个元素添加到数组的末尾，并返回新数组的长度     +++i
+    
+    -->
+</body>
+
+</html>

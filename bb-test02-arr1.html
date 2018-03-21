@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <h3>污染城市列表</h3>
+    <ul id="aqi-list">
+        <!--   
+    <li>第一名：福州（样例），10</li>
+      <li>第二名：福州（样例），10</li> -->
+    </ul>
+    <div id="warning"></div>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        var aqiData = [
+            ["北京", 95],
+            ["上海", 50],
+            ["福州", 10],
+            ["广州", 50],
+            ["成都", 90],
+            ["西安", 100]
+        ];
+        (function () {
+            //var ul = document.getElementById("aqi-list");
+            var arr = ['一', '二', '三', '四', '五', '六']
+            /*
+            在注释下方编写代码
+            遍历读取aqiData中各个城市的数据
+            将空气质量指数大于60的城市显示到aqi-list的列表中
+            */
+            aqiData.sort(function (a, b) {
+                return b[1] - a[1]
+            })
+
+            for (var i = 0; i < aqiData.length; i++) {
+                var choice = aqiData[i]
+                //console.log(choice[1])
+                if (choice[1] > 60) {
+                    // let li = document.createElement("li");
+                    // li.innerHTML = "第" + arr[i] + "名：" + choice[0] + "，" + choice[1];
+                    // ul.append(li)
+                    $("#aqi-list").append(`
+                        <li>第${arr[i]}名：${choice[0]},${choice[1]}</li>                       
+                    `)
+                    $("#warning").html(`
+                        <h1>小心！</h1>
+                        <p>未经授权打冰球可能受罚
+                        将近${1+1}分钟。</p>
+                    `);
+
+                    console.log(choice)
+
+                }
+
+            }
+        })();
+
+    </script>
+    <!-- 
+        （1）Js 数组——filter()、map()、some()、every()、forEach()、lastIndexOf()、indexOf()
+            filter():  过滤出满足条件的数组
+            语法：
+
+            var filteredArray = array.filter(callback[, thisObject]);
+            参数说明：
+
+            callback： 要对每个数组元素执行的回调函数。
+            thisObject ： 在执行回调函数时定义的this对象。
+        （2）map():创建一个新数组，数组里的每个数调用回调函数后变成一个新数组
+        （3）forEach() 方法对数组的每个元素执行一次提供的函数
+        （5）lastIndexOf():
+            var index = array.lastIndexOf(searchElement[, fromIndex]);
+            参数说明
+            searchElement： 要搜索的元素
+            fromIndex ： 开始搜索的位置，默认为数组的长度（length），在这样的情况下，将搜索所有的数组元素。搜索是反方向进行的。
+            功能说明：比较 searchElement 和数组的每个元素是否绝对一致（===），当有元素符合条件时，返回当前元素的索引。如果没有发现，就直接返回 -1 。
+        （4）indexOf():
+            功能与lastIndexOf()一样，搜索是正向进行的
+        （5）every():对数组中的每个元素都执行一次指定的函数（callback），直到此函数返回 false，如果发现这个元素，every 将返回 false，如果回调函数对每个元素执行后都返回 true ，every 将返回 true。它只对数组中的非空元素执行指定的函数，没有赋值或者已经删除的元素将被忽略
+        （6）some():对数组中的每个元素都执行一次指定的函数（callback），直到此函数返回 true，如果发现这个元素，some 将返回 true，如果回调函数对每个元素执行后都返回 false ，some 将返回 false。它只对数组中的非空元素执行指定的函数，没有赋值或者已经删除的元素将被忽略。
+
+
+    -->
+</body>
+
+</html>

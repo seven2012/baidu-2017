@@ -1,0 +1,89 @@
+<!-- My document -->
+<html>
+
+<head>
+    <title>My Document</title>
+</head>
+
+<body>
+    <h1>Header</h1>
+    <p>
+        Paragraph
+    </p>
+</body>
+<script>
+    //测知某节点的文字内容是否全为空白。
+    function is_all_ws(nod) {
+        // Use ECMA-262 Edition 3 String and RegExp features
+        return !(/[^\t\n\r ]/.test(nod.data));
+    }
+
+    //测知是否该略过某节点。
+    function is_ignorable(nod) {
+        return (nod.nodeType == 8) || // 注释节点
+            ((nod.nodeType == 3) && is_all_ws(nod)); // 仅含空白符的文字节点
+    }
+
+    //此为会跳过空白符节点及注释节点的 |previousSibling| 函数
+    function node_before(sib) {
+        while ((sib = sib.previousSibling)) {
+            if (!is_ignorable(sib)) return sib;
+        }
+        return null;
+    }
+    //此为会跳过空白符节点及注释节点的 |nextSibling| 函数
+    function node_after(sib) {
+        while ((sib = sib.nextSibling)) {
+            if (!is_ignorable(sib)) return sib;
+        }
+        return null;
+    }
+    //此为会跳过空白符节点及注释节点的 |lastChild| 函数
+    function last_child(par) {
+        var res = par.lastChild;
+        while (res) {
+            if (!is_ignorable(res)) return res;
+            res = res.previousSibling;
+        }
+        return null;
+    }
+
+    // 此为会跳过空白符节点及注释节点的 |firstChild| 函数
+    function first_child(par) {
+        var res = par.firstChild;
+        while (res) {
+            if (!is_ignorable(res)) return res;
+            res = res.nextSibling;
+        }
+        return null;
+    }
+
+    //* 此为传回值不包含文字节点资料的首尾所有空白符、
+    //* 并将两个以上的空白符缩减为一个的 |data| 函数。
+    function data_of(txt) {
+        var data = txt.data;
+        // Use ECMA-262 Edition 3 String and RegExp features
+        data = data.replace(/[\t\n\r ]+/g, " ");
+        if (data.charAt(0) == " ")
+            data = data.substring(1, data.length);
+        if (data.charAt(data.length - 1) == " ")
+            data = data.substring(0, data.length - 1);
+        return data;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            padding: 10px 20px;
+            margin: 10px auto;
+            border: 1px solid;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .root {
+            width: 860px;
+            margin: 10px auto;
+            display: flex;
+
+            border: 1px solid red;
+        }
+
+        .show-4 {
+            margin: 5px;
+        }
+
+        .show-3 {
+            margin: 3px;
+        }
+        
+        .search{
+            border:none;
+            width:860px;
+        }
+        .qu{
+           border:none;
+           width:860px;
+        }
+        button{
+            margin-left:5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="root">
+        <div class="show-1">
+            <div class="show-2">
+                <div class="show-3">
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+
+                </div>
+                <div class="show-3">
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+                </div>
+            </div>
+            <div class="show-2">
+                <div class="show-3">
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+                </div>
+                <div class="show-3">
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+                </div>
+            </div>
+        </div>
+        <div class="show-1">
+
+            <div class="show-2">
+                <div class="show-3">
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+                </div>
+                <div class="show-3">
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+
+                </div>
+            </div>
+            <div class="show-2">
+                <div class="show-3">
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+
+                </div>
+                <div class="show-3">
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+                </div>
+            </div>
+            <div class="show-2">
+                <div class="show-3">
+                    <div class="show-4"></div>
+
+
+                </div>
+                <div class="show-3">
+                    <div class="show-4"></div>
+                    <div class="show-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="qu">
+            <button id="btn-before">前序遍历</button>
+            <button id="btn-behind">后序遍历</button>
+    </div>
+        
+        <div class="search">
+            <input type="text" name="inp-search" id="inp-search">
+            <button id="btn-search">查询</button>
+        </div>
+
+
+
+    <script>
+
+        //1.声明需要用的全局变量
+        var show = document.querySelector(".root");
+        var rankArr = [];
+        var preShow;
+        var boolen = false;
+        //2.初始化
+        function initialize() {
+            rankArr = [];
+            if (preShow) {
+                preShow.style.background = "#fff";
+                preShow.style.color = "#000";
+            }
+        }
+        //3.显示遍历效果
+        function showRank() {
+            for (var i = 0; i < rankArr.length; i++) {
+                setTimeout(function (i) {
+                    return function () {
+                        if (i == rankArr.length - 1) {
+                            boolen = false;
+                        }
+                        if (preShow) {
+                            preShow.style.background = "#fff";
+                            preShow.style.color = "#000";
+                        }
+                        rankArr[i].style.background = "#b0e11e";
+                        rankArr[i].style.color = "#fff";
+                        preShow = rankArr[i];
+                        console.log(preShow);
+                    }
+                }(i), i * 500)
+            }
+        }
+        //4.前序遍历
+        function beforeOrder(node) {
+            if (node) {
+                rankArr.push(node);
+                var num = node.children;
+                for (var i = 0; i < num.length; i++) {
+                    beforeOrder(num[i]);
+                }
+            }
+        }
+        //5.后序遍历
+        function lastOrder(node) {
+            if (node) {
+                var num = node.children;
+                for (var i = 0; i < num.length; i++) {
+                    lastOrder(num[i]);
+                }
+                rankArr.push(node);
+            }
+        }
+        //6.按钮绑定
+        function btnBefo() {
+            var btnbefo = document.querySelector("#btn-before");
+            btnbefo.onclick = function (e) {
+                e.preventDefault();
+                if (!boolen) {
+                    boolen = true;
+                    initialize();
+                    beforeOrder(show);
+                    showRank();
+                }
+            }
+        }
+        function btnBehi() {
+            var btnbehi = document.getElementById("btn-behind");
+            btnbehi.onclick = function (e) {
+                e.preventDefault();
+                if (!boolen) {
+                    boolen = true;
+                    initialize();
+                    lastOrder(show);//得到数组rankarr;
+                    showRank();
+                }
+            }
+        }
+        //7.查询按钮
+        function searchSp() {
+            var btnSearch = document.getElementById("btn-search");
+            btnSearch.onclick = function (e) {
+                e.preventDefault();
+                if (!boolen) {
+                    boolen = true;
+                    initialize();
+                    beforeOrder(show);
+                    timeR();
+                }
+            }
+        }
+        //8.使用setInterval显示遍历效果
+        function timeR() {
+            var i = 0;
+            var abc = rankArr[i];
+            if (document.getElementById("inp-search").value == "") {
+                alert("请输入查询内容");
+                boolen = false;
+            } else {
+                var timer = setInterval(function () {
+                    if (i < rankarr.length) {
+                        rankArr[rankarr.length - 1].style.background = "#fff";
+                        rankArr[rankarr.length - 1].style.color = "#000";
+                        if (i - 1 > -1) {
+                            rankArr[i - 1].style.background = "#fff";
+                            rankArr[i - 1].style.color = "#000";
+                        }
+                        rankArr[i].style.background = "#b0e11e";
+                        rankArr[i].style.color = "#fff";
+                        i++;
+                    } else {
+                        boolen = false;
+                        rankArr[i - 1].style.background = "#fff";
+                        rankArr[i - 1].style.color = "#000";
+                        clearInterval(timer);
+                        searchTo();
+                    }
+                }, 100);
+            }
+        }
+        //9.设置模糊查询。
+        function searchTo() {
+            var searchArr = new Array();
+            for (var i = 0; i < rankarr.length; i++) {
+                var childA = rankArr[i].childNodes;
+                var childB = null;
+                try {
+                    childB = Array.prototype.slice.call(childA, 0);
+                } catch (ex) {
+                    for (var j = 0; j < childA.length; j++) {
+                        childB.push(childA[j]);
+                    }
+                }
+                for (var k = 0; k < childB.length; k++) {
+                    if (childB[k].nodeType == "3" && childB[k] != null && childB[k].nodeValue.indexOf(document.getElementById("inp-search").value) > -1) {
+                        rankArr[i].style.background = "#b0e11e";
+                        rankArr[i].style.color = "#fff";
+                        searchArr.push(rankArr[i]);
+                    }
+                }
+            }
+            if (searchArr.length == 0) {
+                alert("未找到相似内容");
+            } else {
+                alert("找到" + searchArr.length + "个相似内容，已标记所在区域")
+            }
+        }
+        window.onload = function () {
+            btnBefo();
+            btnBehi();
+            searchSp();
+        }
+
+
+
+
+    </script>
+</body>
+
+</html>

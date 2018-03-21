@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #outNum {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            margin-top: 5px;
+            display: flex;
+        }
+
+        .item {
+            background: red;
+            text-align: center;
+            height: 25px;
+            margin: 3px;
+            display: inline-block;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <textarea name="text" id="inNum" cols="30" rows="10"></textarea>
+    <button id="btnLeftIn">左侧入</button>
+    <button id="btnRightIn">右侧入</button>
+    <button id="btnLeftOut">左侧出</button>
+    <button id="btnRightOut">右侧出</button>
+
+
+    <br />
+
+    <input type="search" name="str" id="inSearch">
+    <button id="btnSearch">搜索</button>
+
+    <ul id="outNum">
+
+    </ul>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        (function () {
+            var add_left = document.getElementById("btnLeftIn");
+            var add_right = document.getElementById("btnRightIn");
+            var del_left = document.getElementById("btnLeftOut");
+            var del_right = document.getElementById("btnRightOut");
+            var btn_search = document.getElementById("btnSearch")
+
+            var inNum = document.getElementById("inNum")
+            var outNum = document.getElementById("outNum");
+            var li = document.getElementsByTagName("li");
+            var inSearch = document.getElementById("inSearch")
+
+
+            add_left.onclick = function () { add("left") };
+            add_right.onclick = function () { add("right") };
+            del_left.onclick = function () { del("left") };
+            del_right.onclick = function () { del("right") };
+            btn_search.onclick = function () { search() }
+
+
+
+        })()
+
+
+
+        function add(dir) {
+
+            var li = document.getElementsByTagName("li");
+
+            while ((li.length + 1) > 60) {
+                alert("队列超过限定个数60个！")
+                return;
+            }
+
+
+
+            if (/^\s*$/.test(inNum.value)) {//全是空格的排除法
+                alert("请输入有效值")
+                initInput();
+            } else {
+                
+                var datas = inNum.value.trim()//去除首尾的空格符
+                var dataList = datas.split(/[\r\s+\u3000\n,，、.。]/g)//以这些符号作为字符串的分隔
+
+                dataList.forEach(function (ele) {
+                    var li = document.createElement("li");
+                    li.setAttribute("class", "item");
+                    console.log(ele);
+                    li.innerHTML = ele
+
+
+
+                    li.onclick = function () {
+                        
+                        alert("删除：" + ele);
+                        this.parentNode.removeChild(this)
+                    }
+
+                    if (dir == "right") {
+                        outNum.appendChild(li)
+                    }
+                    initInput()
+
+                })
+                var dataList2 = dataList.reverse();
+                console.log(dataList2)
+                dataList2.forEach(function (ele) {
+                    var li = document.createElement("li");
+                    li.setAttribute("class", "item");
+                    console.log(ele);
+                    li.innerHTML = ele;
+
+                    if (dir == "left") {
+                        //del_ff(outNum)
+                        console.log(li)
+                        console.log(outNum.firstChild)
+                        outNum.insertBefore(li, outNum.firstChild)
+                    }
+                    initInput()
+                })
+
+            }
+
+        }
+
+
+        function initInput() {
+            var inNum = document.getElementById("inNum")
+            inNum.value = "";
+            inNum.focus();
+
+        }
+
+        function del(dir) {
+            var dataFirst = outNum.firstChild
+            var dataLast = outNum.lastChild
+            let data;
+            if (dir == "left") {
+                data = dataFirst.innerHTML
+                let dataLeft = data
+                alert("左出：" + dataLeft)
+                outNum.removeChild(dataFirst)
+
+            }
+            else if (dir == "right") {
+                data = dataLast.innerHTML
+                let dataRight = data
+                alert("右出：" + dataRight)
+                outNum.removeChild(dataLast)
+            }
+
+        }
+
+
+
+
+        function search() {
+            var searchStr = inSearch.value;
+            var li = document.getElementsByTagName("li");
+            var oLength = li.length;
+            for (var i = 0; i < oLength; i++) {
+                //console.log(searchStr + "||" + li[i].innerHTML)
+                var text = li[i].innerHTML;
+                var reg = new RegExp(searchStr, "ig");//全局不分大小写
+                if (reg.test(text)) {
+
+                    li[i].style.color = "white";
+                } else {
+                    li[i].style.color = "black";
+                }
+                inSearch.value = "";
+                inSearch.focus();
+
+            }
+
+        }
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

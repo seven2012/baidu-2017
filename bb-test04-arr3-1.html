@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript Task 04</title>
+</head>
+<style>
+    #outNum {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+    }
+
+    #outNum li.liStyle {
+        background: red;
+        width: 25px;
+        height: 25px;
+        color: white;
+        text-align: center;
+        margin: 2px;
+
+    }
+</style>
+
+
+<body>
+
+    <input type="text" id="inNum">
+    <button id="btnLeftIn">左侧入</button>
+    <button id="btnRightIn">右侧入</button>
+    <button id="btnLeftOut">左侧出</button>
+    <button id="btnRightOut">右侧出</button>
+
+    <ul id="outNum"></ul>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+
+
+
+
+        var myArr = [];
+        var $inNum = document.getElementById("inNum")
+        //初始化
+        function initial() {
+
+            //var $outNum = $("#outNum")
+            var btnleftIn = document.getElementById("btnLeftIn")
+            var btnrightIn = document.getElementById("btnRightIn");
+            var btnleftOut = document.getElementById("btnLeftOut");
+            var btnrightOut = document.getElementById("btnRightOut");
+            var li = document.getElementsByTagName("li")
+
+            initInput();
+            //"左侧入"
+            btnleftIn.addEventListener("click", function () {
+
+                leftIn($inNum.value);
+                render();
+                initInput();
+            }, false)
+            //"右侧入"
+            btnrightIn.addEventListener("click", function () {
+                rightIn($inNum.value);
+                render();
+                initInput()
+
+            }, false)
+            //"左侧出"
+            btnleftOut.addEventListener("click", function () {
+                if (myArr.length <= 0) {
+                    alert("队列为空")
+                } else {
+                    let dataL = myArr.shift()
+                    alert("往左删出数字是" + dataL)
+                    //myArr.shift()
+                    render();
+                    initInput();
+                }
+
+            }, false)
+            //"右侧出"
+            btnrightOut.addEventListener("click", function (i) {
+                if (myArr.length <= 0) {
+                    alert("队列为空")
+                } else {  
+                    var dataR = myArr.pop() 
+                    alert("往右侧删出的数字是："+dataR)                
+                    //myArr.pop()                  
+                    render();
+                    initInput();
+                }
+
+            }, false)
+        }
+
+        function leftIn(num) {
+            var flag = vertify(num);
+            if (flag == true) {
+                myArr.unshift(num);
+            }
+        }
+        function rightIn(num) {
+            var flag = vertify(num);
+            if (flag == true) {
+                myArr.push(num);
+            }
+        }
+        //验证文本框中的值
+        function vertify(data) {
+            if (data == "") {
+                alert("请输入要插入的值");
+                return false;
+            } else if (isNaN(data)) {
+                alert("请输入数字！");
+                return false;
+            } else if (Number(data) < 0 || Number(data) > 99) {
+                alert("请输入100以内的整数");
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        //input初始化
+        function initInput() {
+            $inNum.value = "";
+            $inNum.focus();
+        }
+
+        //创建要显示的li列表,并追加到ul中
+        function render() {
+            ul = document.getElementById("outNum");
+            //应先将ul的innerHTML内容清除；
+            ul.innerHTML = "";
+            for (var i = 0; i < myArr.length; i++) {
+                var li = document.createElement("li");
+                li.innerHTML = myArr[i];
+                li.id = "item-" + i;//设置li的id值
+                li.setAttribute("class", "liStyle");
+                ul.appendChild(li);
+                li.onmouseover = function () {
+                    this.setAttribute("style", "cursor:pointer")
+                    
+                };
+                //执行li单击删除操作
+                deleteSelected(i);
+            }
+        }
+
+
+        //给每一个添加的li添加点击事件(点击即删除)
+        function deleteSelected(i) {
+            var temp = document.getElementById("item-" + i);
+            console.log(temp)
+            var data = temp.innerHTML
+            console.log(data)
+            temp.addEventListener("click", function () {
+                alert("删除的数字是" + data)
+                index = temp.id.substr(5);//获取删除元素的起始索引位置,item-index(0,1,2,3,...)
+                console.log(index)
+                myArr.splice(index, 1); //从索引为index(0,1,2,3...)的位置(即用id="item-index")的位置定位删除一个现有的元素
+                render();
+                initInput();
+            }, false);
+        }
+        window.addEventListener("load", initial, false);
+    </script>
+</body>
+
+</html>

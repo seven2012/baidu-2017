@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <style>
+            #outNum {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                margin-top: 5px;
+                display: flex;
+            }
+
+            .item {
+                background: red;
+                width: 25px;
+                margin: 3px;
+                display: inline-block;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+
+    <body>
+        <input type="text" id="inNum">
+        <button id="btnLeftIn">左侧入</button>
+        <button id="btnRightIn">右侧入</button>
+        <button id="btnLeftOut">左侧出</button>
+        <button id="btnRightOut">右侧出</button>
+        <span class="space">&nbsp&nbsp</span>
+        <button id="sort">排序</button>
+
+        <ul id="outNum">
+
+        </ul>
+        <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+        <script>
+            (function () {
+                var add_left = document.getElementById("btnLeftIn");
+                var add_right = document.getElementById("btnRightIn");
+                var del_left = document.getElementById("btnLeftOut");
+                var del_right = document.getElementById("btnRightOut");
+
+                var inNum = document.getElementById("inNum")
+                var outNum = document.getElementById("outNum");
+                var li = document.getElementsByTagName("li");
+
+
+                add_left.onclick = function () { add("left") };
+                add_right.onclick = function () { add("right") };
+                del_left.onclick = function () { del("left") };
+                del_right.onclick = function () { del("right") };
+
+
+
+                var sort = document.getElementById("sort");
+                sort.onclick = bubble_sort;
+                //bubbleSort();
+
+
+            })()
+
+
+            function add(dir) {
+
+                var li = document.getElementsByTagName("li");
+
+                while ((li.length + 1) > 60) {
+                    alert("队列超过限定个数60个！")
+                    return;
+                }
+
+                var data = inNum.value
+                if (isNaN(data)) {
+                    alert("请输入数字！")
+                    initInput();
+                }
+                else if (data < 10 || data > 100) {
+                    alert("请输入10~100的数字！");
+                    initInput()
+                } else {
+                    var li = document.createElement("li");
+                    li.setAttribute("class", "item");
+
+                    li.style.height = data + "px";
+                    li.style.marginTop = (100 - data) + "px";
+
+                    li.onclick = function () {
+                        alert("删除数字：" + data);
+                        this.parentNode.removeChild(this)
+                    }
+
+                    if (dir == "left") {
+                        outNum.insertBefore(li, outNum.firstChild)
+                    }
+                    else if (dir == "right") {
+                        outNum.appendChild(li)
+                    }
+                    initInput()
+                }
+
+
+            }
+
+
+
+
+            function initInput() {
+                var inNum = document.getElementById("inNum")
+                inNum.value = "";
+                inNum.focus()
+            }
+
+            function del(dir) {
+                var dataFirst = outNum.firstChild
+                var dataLast = outNum.lastChild
+                let data;
+                if (dir == "left") {
+                    data = dataFirst.style.height
+                    let dataLeft = parseInt(data)
+                    alert("左出数字：" + dataLeft)
+                    outNum.removeChild(dataFirst)
+
+                }
+                else if (dir == "right") {
+                    data = dataLast.style.height
+                    let dataRight = parseInt(data)
+                    alert("右出数字：" + dataRight)
+                    outNum.removeChild(dataLast)
+                }
+
+            }
+
+            function del_ff(outNum) {
+
+                var elem_child = outNum.childNodes;
+                console.log(elem_child)
+
+                for (var i = 0; i < elem_child.length; i++) {
+
+                    if (elem_child[i].nodeName == "#text" && !/\s/.test(elem_child.nodeValue)) {
+                        outNum.removeChild(elem_child[i])
+
+                    }
+
+                }
+
+            }
+
+            //冒泡排序写法一：
+            function bubble_sort() {
+                var outNum = document.getElementById("outNum")
+                var len = outNum.childNodes.length;
+                del_ff(outNum)
+                console.log(len)
+                console.log(outNum.childNodes)
+                if (len <= 1) {
+                    return;
+                }
+                for (var i = 0; i < len; i++) {
+                    for (var j = 0; j < len - i - 1; j++) {
+                        setTimeout((function (k) {
+                            var outNum = document.getElementById("outNum");
+                            var $li = $("#outNum > li")
+                            var nodes = outNum.childNodes;
+                            //console.log(nodes)
+                            //var k
+                            var k0 = parseInt(nodes[k].style.height);
+                            var k1 = parseInt(nodes[k + 1].style.height);
+                            if (k0 > k1) {
+                                nodes[k].style.height = k1 + "px";
+                                nodes[k].style.marginTop = (100 - k1) + "px";
+                                nodes[k + 1].style.height = k0 + "px";
+                                nodes[k + 1].style.marginTop = (100 - k0) + "px";
+                            }
+                        })(j), 1000)
+                    }
+                }
+            }
+
+
+            //冒泡排序写法二：
+            // function bubbleSort(){
+            //     var bubbleSort = document.getElementById("sort");
+            //     sort.onclick = function(e){
+            //         e.preventDefault();
+            //         var li = document.getElementsByTagName("li");
+            //         var olength = li.length;
+            //         console.log(olength)
+            //         var temp;
+            //         while(olength > 0){
+            //             //var olength = li.length;
+            //             for(var i=0;i<olength-1;i++){
+            //                 if(li[i].style.height > li[i+1].style.height){
+            //                     temp = li[i].style.height;
+            //                     li[i].style.height = li[i+1].style.height;
+            //                     li[i+1].style.height = temp;
+
+            //                     li[i].style.marginTop = (100-parseInt(li[i].style.height)) + "px";
+            //                     li[i+1].style.marginTop = (100-parseInt(li[i+1].style.height)) + "px";
+            //                 }
+            //             }
+            //             olength--;
+            //         }
+            //     }
+            // }
+
+
+
+
+
+
+
+
+
+        </script>
+        <!-- 
+        array.shift():从数组中删除第一个元素，并返回删除的数               i --
+        array.pop():从数组中删除最后一个元素，并返回删除的数                --i
+        
+        array.unshift():将一个或多个元素添加到数组的开头，并返回新数组的长度 i+++
+        array.push():将一个或多个元素添加到数组的末尾，并返回新数组的长度     +++i
+    
+    -->
+    </body>
+
+    </html>
+</body>
+
+</html>
